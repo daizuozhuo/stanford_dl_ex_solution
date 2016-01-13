@@ -20,7 +20,7 @@ m=size(train.X,2);
 n=size(train.X,1);
 
 % Train logistic regression classifier using minFunc
-options = struct('MaxIter', 100);
+options = struct('MaxIter', 100,'useMex', 0);
 
 % First, we initialize theta to some small random values.
 theta = rand(n,1)*0.001;

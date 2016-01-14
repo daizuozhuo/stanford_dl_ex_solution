@@ -21,12 +21,39 @@ function [f,g] = softmax_regression(theta, X,y)
   f = 0;
   g = zeros(size(theta));
 
+%A = zeros(num_classes,m);
+%
+%I = sub2ind(size(A), y, 1:size(A,2));
+%A(I) = 1;
+%
+%hx = exp(theta'*X); % (num_classes-1) * m
+%hx = [hx;ones(1,m)];
+%
+%s_hx = sum(hx);
+%hx = hx./repmat(s_hx,  size(hx,1), 1);
+%
+%f = -sum(sum(A.*log(hx)));
+%
+%g = - X*(A - hx)';
+%g(:,end) = [];
+%
+%g=g(:); % make gradient a vector for minFunc
+%end
+
+ex = e.^(theta'*X); 
+ex = [ex; ones(1, m)]; %ex(k, m) means mth example belongs to k
+su = sum(ex, 1); %su(m) means mth example belongs to all category
+A = zeros(num_classes,m);
+I = sub2ind(size(A), y, 1:size(A,2));
+A(I) = 1; %A(k, m) means if the mth example belongs to k
+f=-sum(sum(A.*log(bsxfun(@rdivide, ex,su))));
   %
   % TODO:  Compute the softmax objective function and gradient using vectorized code.
   %        Store the objective function value in 'f', and the gradient in 'g'.
   %        Before returning g, make sure you form it back into a vector with g=g(:);
   %
 %%% YOUR CODE HERE %%%
-  
-  g=g(:); % make gradient a vector for minFunc
+g = -X*(A - (bsxfun(@rdivide, ex, su)))';
+g(:,end) = [];
+g=g(:); % make gradient a vector for minFunc
 
